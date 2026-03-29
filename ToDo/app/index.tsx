@@ -1,6 +1,7 @@
 import DateSelector from "@/components/DateSelector";
 import FilterTabs from "@/components/FilterTabs";
 import Header from "@/components/Header";
+import TaskCard from "@/components/TaskCard";
 import Colors from "@/constants/Colors";
 import { FilterOptions, TASKS } from "@/constants/tasks";
 import { StatusBar } from "expo-status-bar";
@@ -17,7 +18,7 @@ const index = () => {
       <FlatList
         data={TASKS}
         keyExtractor={(item) => item.id}
-        renderItem={({ item }) => <Text>{item.title}</Text>}
+        renderItem={({ item }) => <TaskCard task={item} />}
         ListHeaderComponent={
           <>
             {/* header */}
