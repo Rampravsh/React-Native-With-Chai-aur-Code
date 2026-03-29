@@ -10,10 +10,10 @@ type DateItem = {
 };
 
 const generateDates = (): DateItem[] => {
-  const base = new Date(2026, 3, 29);
-  return Array.from({ length: 5 }, (_, i) => {
+  const base = new Date();
+  return Array.from({ length: 7 }, (_, i) => {
     const date = new Date(base);
-    date.setDate(base.getDate() + i);
+    date.setDate(base.getDate() + (i - 3)); // Show 3 days before and 3 days after today
     return {
       month: date.toLocaleDateString("en-US", { month: "short" }),
       day: date.getDate(),
@@ -24,7 +24,7 @@ const generateDates = (): DateItem[] => {
 };
 
 const DATES = generateDates();
-const DEFAULT_SELECTED = DATES[2].key;
+const DEFAULT_SELECTED = DATES[3].key; // Default to today (middle of the array)
 
 const DateSelector = () => {
   const [selectedDate, setSelectedDate] = useState(DEFAULT_SELECTED);
