@@ -6,6 +6,7 @@ import {
   Switch,
   ScrollView,
   TextInput,
+  Pressable,
 } from "react-native";
 
 function HomeScreen() {
@@ -38,12 +39,19 @@ function HomeScreen() {
           value={isEnabled}
         /> */}
 
-      <TextInput
-        style={{ backgroundColor: "aqua", height: 100, borderWidth: 2 }}
+      {/* <TextInput
+        style={{ backgroundColor: "aqua", borderWidth: 2 }}
         value={text}
         onChangeText={setText}
-        keyboardType="phone-pad"
-      />
+        keyboardType="default"
+        multiline
+        numberOfLines={4}
+        placeholder="Enter Your Text"
+      /> */}
+
+      <Pressable onPress={pressMe} >
+        <Text>Make Me Pressable</Text>
+      </Pressable>
     </ScrollView>
   );
 }
