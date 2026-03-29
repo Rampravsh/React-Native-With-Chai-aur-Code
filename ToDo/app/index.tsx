@@ -1,13 +1,15 @@
 import DateSelector from "@/components/DateSelector";
+import FilterTabs from "@/components/FilterTabs";
 import Header from "@/components/Header";
 import Colors from "@/constants/Colors";
-import { TASKS } from "@/constants/tasks";
+import { FilterOptions, TASKS } from "@/constants/tasks";
 import { StatusBar } from "expo-status-bar";
-import React from "react";
-import { FlatList, StyleSheet, Text, View } from "react-native";
+import React, { useState } from "react";
+import {  FlatList, StyleSheet, Text, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const index = () => {
+  const [activeFilter, setActiveFilter] = useState<FilterOptions>("All");
   const insets = useSafeAreaInsets();
   return (
     <View style={[styles.container, { paddingTop: insets.top }]}>
@@ -23,6 +25,7 @@ const index = () => {
             {/* DateSelector */}
             <DateSelector />
             {/* FiltersTabs */}
+            <FilterTabs selected={activeFilter} onSelect={setActiveFilter} />
           </>
         }
         contentContainerStyle={styles.list}
