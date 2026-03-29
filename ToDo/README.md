@@ -1,50 +1,55 @@
-# Welcome to your Expo app 👋
+# ToDo App
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+A simple ToDo application built with React Native and Expo.
 
-## Get started
+## 🚀 Getting Started
 
-1. Install dependencies
+### Prerequisites
 
-   ```bash
+- Node.js
+- Expo CLI
+
+### Installation
+
+1. Clone the repository:
+   ```sh
+   git clone https://github.com/your-username/todo-app.git
+   ```
+2. Install dependencies:
+   ```sh
    npm install
    ```
 
-2. Start the app
+### Running the application
 
-   ```bash
-   npx expo start
+1. Start the development server:
+   ```sh
+   npm start
    ```
+2. Follow the instructions in the terminal to run the app on an emulator or a physical device.
 
-In the output, you'll find options to open the app in a
+## 🛠️ Built With
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+- [React Native](https://reactnative.dev/) - A framework for building native apps with React.
+- [Expo](https://expo.dev/) - A framework and a platform for universal React applications.
+- [Expo Router](https://docs.expo.dev/router/introduction/) - A file-based router for React Native and web applications.
+- [TypeScript](https://www.typescriptlang.org/) - A typed superset of JavaScript that compiles to plain JavaScript.
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+## 📂 Folder Structure
 
-## Get a fresh project
-
-When you're ready, run:
-
-```bash
-npm run reset-project
+```
+.
+├── app/              # Main application screens
+├── components/       # Reusable components
+├── constants/        # Colors, tasks, and other constants
+├── .gitignore        # Git ignore file
+├── app.json          # Expo configuration
+├── package.json      # Project dependencies and scripts
+└── tsconfig.json     # TypeScript configuration
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+## 📸 Screenshots
 
-## Learn more
-
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+| Light Mode | Dark Mode |
+| ---------- | --------- |
+| (Add screenshot here) | (Add screenshot here) |
