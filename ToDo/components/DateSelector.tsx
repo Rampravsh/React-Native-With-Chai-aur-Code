@@ -1,11 +1,11 @@
 import Colors from "@/constants/Colors";
 import React, { useState } from "react";
-import { ScrollView, StyleSheet, Text, TouchableOpacity } from "react-native";
+import { ScrollView, StyleSheet, Text, TouchableOpacity, useColorScheme } from "react-native";
 
 type DateItem = {
   month: string;
   day: number;
-  weeday: string;
+  weekday: string;
   key: string;
 };
 
@@ -17,7 +17,7 @@ const generateDates = (): DateItem[] => {
     return {
       month: date.toLocaleDateString("en-US", { month: "short" }),
       day: date.getDate(),
-      weeday: date.toLocaleDateString("en-US", { weekday: "short" }),
+      weekday: date.toLocaleDateString("en-US", { weekday: "short" }),
       key: date.toISOString(),
     };
   });
@@ -28,6 +28,9 @@ const DEFAULT_SELECTED = DATES[3].key; // Default to today (middle of the array)
 
 const DateSelector = () => {
   const [selectedDate, setSelectedDate] = useState(DEFAULT_SELECTED);
+  const theme = useColorScheme() ?? "light";
+  const colors = Colors[theme];
+
   return (
     <ScrollView
       horizontal
@@ -39,17 +42,17 @@ const DateSelector = () => {
         return (
           <TouchableOpacity
             key={item.key}
-            style={[styles.dateItem, isSelected && styles.dateItemSelected]}
+            style={[styles.dateItem, isSelected && { backgroundColor: colors.primary }]}
             onPress={() => setSelectedDate(item.key)}
           >
-            <Text style={[styles.month, isSelected && styles.selectText]}>
+            <Text style={[styles.month, { color: colors.textSecondary }, isSelected && { color: colors.textPrimary }]}>
               {item.month}
             </Text>
-            <Text style={[styles.day, isSelected && styles.selectText]}>
+            <Text style={[styles.day, { color: colors.textPrimary }, isSelected && { color: colors.textPrimary }]}>
               {item.day}
             </Text>
-            <Text style={[styles.weekday, isSelected && styles.selectText]}>
-              {item.weeday}
+            <Text style={[styles.weekday, { color: colors.textSecondary }, isSelected && { color: colors.textPrimary }]}>
+              {item.weekday}
             </Text>
           </TouchableOpacity>
         );
@@ -74,25 +77,16 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     minWidth: 64,
   },
-  dateItemSelected: {
-    backgroundColor: Colors.primary,
-  },
   month: {
     fontSize: 12,
-    color: Colors.textSecondary,
     marginBottom: 6,
   },
   day: {
     fontSize: 22,
     fontWeight: "700",
-    color: Colors.textPrimary,
     marginBottom: 6,
   },
   weekday: {
     fontSize: 12,
-    color: Colors.textSecondary,
-  },
-  selectText: {
-    color: "#ffffff",
   },
 });

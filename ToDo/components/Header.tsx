@@ -1,17 +1,20 @@
 import Colors from "@/constants/Colors";
 import { Ionicons } from "@expo/vector-icons";
 import React from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View, useColorScheme } from "react-native";
 
 const Header = () => {
+  const theme = useColorScheme() ?? "light";
+  const colors = Colors[theme];
+
   return (
     <View style={styles.container}>
-      <TouchableOpacity>
-        <Ionicons name="chevron-back" size={22} color={Colors.textPrimary} />
+      <TouchableOpacity style={[styles.iconButton, { backgroundColor: colors.surface }]}>
+        <Ionicons name="chevron-back" size={22} color={colors.textPrimary} />
       </TouchableOpacity>
-      <Text style={styles.title}>Today's Task</Text>
-      <TouchableOpacity>
-        <Ionicons name="notifications-outline" size={22} color={Colors.textPrimary} />
+      <Text style={[styles.title, { color: colors.textPrimary }]}>Today's Task</Text>
+      <TouchableOpacity style={[styles.iconButton, { backgroundColor: colors.surface }]}>
+        <Ionicons name="notifications-outline" size={22} color={colors.textPrimary} />
       </TouchableOpacity>
     </View>
   );
@@ -32,13 +35,11 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 12,
-    backgroundColor: Colors.surface,
     justifyContent: "center",
     alignItems: "center",
   },
   title: {
     fontSize: 20,
     fontWeight: "700",
-    color: Colors.textPrimary,
   },
 });

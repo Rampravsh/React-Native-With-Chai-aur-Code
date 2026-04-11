@@ -2,28 +2,31 @@ import Colors from "@/constants/Colors";
 import { Task } from "@/constants/tasks";
 import { Ionicons } from "@expo/vector-icons";
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
-
-const STATUS_COLOR = {
-  Done: Colors.statusDone,
-  "In Progress": Colors.statusInProgress,
-  Todo: Colors.statusTodo,
-};
+import { StyleSheet, Text, View, useColorScheme } from "react-native";
 
 type TaskCardProps = {
   task: Task;
 };
 
 const TaskCard = ({ task }: TaskCardProps) => {
+  const theme = useColorScheme() ?? "light";
+  const colors = Colors[theme];
+
+  const STATUS_COLOR = {
+    Done: colors.statusDone,
+    "In Progress": colors.statusInProgress,
+    Todo: colors.statusTodo,
+  };
+
   return (
-    <View style={styles.card}>
+    <View style={[styles.card, { backgroundColor: colors.surface, borderColor: colors.border }]}>
       <View style={styles.content}>
-        <Text style={styles.category}>{task.category}</Text>
-        <Text style={styles.title}>{task.title}</Text>
+        <Text style={[styles.category, { color: colors.textPrimary }]}>{task.category}</Text>
+        <Text style={[styles.title, { color: colors.textPrimary }]}>{task.title}</Text>
         <View style={styles.footer}>
           <View style={styles.timeRow}>
-            <Ionicons name="time-outline" size={14} color={Colors.primary} />
-            <Text style={styles.time}>{task.time}</Text>
+            <Ionicons name="time-outline" size={14} color={colors.primary} />
+            <Text style={[styles.time, { color: colors.primary }]}>{task.time}</Text>
           </View>
           <Text style={[styles.status, { color: STATUS_COLOR[task.status] }]}>
             {task.status}
@@ -46,7 +49,6 @@ export default TaskCard;
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: Colors.surface,
     borderRadius: 18,
     padding: 18,
     marginHorizontal: 20,
@@ -54,19 +56,16 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     borderWidth: 1,
-    borderColor: Colors.border,
   },
   content: {
     flex: 1,
   },
   category: {
     fontSize: 12,
-    color: Colors.textPrimary,
   },
   title: {
     fontSize: 17,
     fontWeight: "600",
-    color: Colors.textPrimary,
     marginBottom: 14,
   },
   footer: {
@@ -81,7 +80,6 @@ const styles = StyleSheet.create({
   },
   time: {
     fontSize: 12,
-    color: Colors.primary,
     fontWeight: "500",
   },
   status: {

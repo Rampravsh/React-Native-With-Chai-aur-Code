@@ -1,7 +1,7 @@
 import Colors from "@/constants/Colors";
 import { FILTER_OPTIONS, FilterOptions } from "@/constants/tasks";
 import React from "react";
-import { ScrollView, StyleSheet, Text, TouchableOpacity } from "react-native";
+import { ScrollView, StyleSheet, Text, TouchableOpacity, useColorScheme } from "react-native";
 
 type FileterTabsProps = {
   selected: FilterOptions;
@@ -9,6 +9,9 @@ type FileterTabsProps = {
 };
 
 const FilterTabs = ({ selected, onSelect }: FileterTabsProps) => {
+  const theme = useColorScheme() ?? "light";
+  const colors = Colors[theme];
+
   return (
     <ScrollView
       horizontal
@@ -21,9 +24,19 @@ const FilterTabs = ({ selected, onSelect }: FileterTabsProps) => {
           <TouchableOpacity
             key={item}
             onPress={() => onSelect(item)}
-            style={[styles.tab, isSelected && styles.tabSelected]}
+            style={[
+              styles.tab,
+              { backgroundColor: colors.surface, borderColor: colors.border },
+              isSelected && { backgroundColor: colors.primary, borderColor: colors.primary },
+            ]}
           >
-            <Text style={[styles.tab, isSelected && styles.tabSelected]}>
+            <Text
+              style={[
+                styles.tabText,
+                { color: colors.textSecondary },
+                isSelected && { color: colors.textPrimary },
+              ]}
+            >
               {item}
             </Text>
           </TouchableOpacity>
@@ -42,16 +55,13 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
   },
   tab: {
-    paddingVertical: 12,
-    paddingHorizontal: 16,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
     borderRadius: 20,
-    backgroundColor: "#e5e7eb",
-    color: "#374151",
+    borderWidth: 1,
+  },
+  tabText: {
     fontWeight: "500",
     fontSize: 14,
-  },
-  tabSelected: {
-    backgroundColor: Colors.primary,
-    color: "#ffffff",
   },
 });
