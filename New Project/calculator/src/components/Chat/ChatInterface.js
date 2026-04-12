@@ -3,7 +3,7 @@ import { View, FlatList, StyleSheet, Text, ActivityIndicator } from 'react-nativ
 import { MessageBubble } from './MessageBubble';
 import { ChatInput } from './ChatInput';
 
-export const ChatInterface = ({ messages, onSend, isThinking }) => {
+export const ChatInterface = ({ messages, onSend, isThinking, onOpenCalculator }) => {
   const flatListRef = useRef(null);
 
   return (
@@ -26,7 +26,7 @@ export const ChatInterface = ({ messages, onSend, isThinking }) => {
           ) : null
         }
       />
-      <ChatInput onSend={onSend} />
+      <ChatInput onSend={onSend} onOpenCalculator={onOpenCalculator} />
     </View>
   );
 };

@@ -6,6 +6,7 @@ import * as Speech from 'expo-speech';
 import { LinearGradient } from 'expo-linear-gradient';
 import { LottieAvatar } from './src/components/Avatar/LottieAvatar';
 import { ChatInterface } from './src/components/Chat/ChatInterface';
+import { CustomKeypad } from './src/components/Keypad/CustomKeypad';
 import { parseMathQuery } from './src/utils/mathParser';
 
 export default function App() {
@@ -14,6 +15,7 @@ export default function App() {
   ]);
   const [avatarState, setAvatarState] = useState('idle');
   const [isThinking, setIsThinking] = useState(false);
+  const [isKeypadOpen, setIsKeypadOpen] = useState(false);
 
   const addMessage = (text, isAI) => {
     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
@@ -21,9 +23,10 @@ export default function App() {
   };
 
   const handleSend = (userText) => {
+    setIsKeypadOpen(false); // Automatically transition out of keypad on send
     addMessage(userText, false);
     setIsThinking(true);
-    setAvatarState('idle'); 
+    setAvatarState('idle');  
     
     setTimeout(() => {
       const calculation = parseMathQuery(userText);
@@ -69,7 +72,19 @@ export default function App() {
               </TouchableWithoutFeedback>
               
               <View style={styles.chatSection}>
-                <ChatInterface messages={messages} onSend={handleSend} isThinking={isThinking} />
+                {isKeypadOpen ? (
+                  <CustomKeypad 
+                    onSend={handleSend} 
+                    onClose={() => setIsKeypadOpen(false)} 
+                  />
+                ) : (
+                  <ChatInterface 
+                    messages={messages} 
+                    onSend={handleSend} 
+                    isThinking={isThinking} 
+                    onOpenCalculator={() => setIsKeypadOpen(true)}
+                  />
+                )}
               </View>
             </View>
           </KeyboardAvoidingView>
