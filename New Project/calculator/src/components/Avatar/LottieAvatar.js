@@ -3,17 +3,17 @@ import { View, StyleSheet, Text, Animated, LayoutAnimation } from 'react-native'
 import LottieView from 'lottie-react-native';
 
 const ANIMATIONS = {
-  idle: 'https://raw.githubusercontent.com/LottieFiles/lottie-react-native/master/example/assets/PinJump.json',
-  happy: 'https://raw.githubusercontent.com/LottieFiles/lottie-react-native/master/example/assets/Watermelon.json',
-  confused: 'https://raw.githubusercontent.com/LottieFiles/lottie-react-native/master/example/assets/LottieLogo1.json',
+  idle: require('../../../assets/lottie/idle.json'),
+  // Using idle.json everywhere as requested
+  happy: require('../../../assets/lottie/idle.json'),
+  confused: require('../../../assets/lottie/idle.json'),
 };
 
 export const LottieAvatar = ({ currentState, isThinking }) => {
   const animationRef = useRef(null);
   const pulseAnim = useRef(new Animated.Value(1)).current;
-  const lottieOpacity = useRef(new Animated.Value(1)).current;
 
-  // Faster pulse when thinking, smooth infinite glow
+  // Faster pulse when thinking, to animate the shadow glow radius
   useEffect(() => {
     pulseAnim.stopAnimation();
     pulseAnim.setValue(1);
@@ -22,32 +22,21 @@ export const LottieAvatar = ({ currentState, isThinking }) => {
 
     const pulsation = Animated.loop(
       Animated.sequence([
-        Animated.timing(pulseAnim, { toValue: toValue, duration: duration, useNativeDriver: true }),
-        Animated.timing(pulseAnim, { toValue: 1, duration: duration, useNativeDriver: true }),
+        Animated.timing(pulseAnim, { toValue: toValue, duration: duration, useNativeDriver: false }), // false because shadowRadius can't use native driver
+        Animated.timing(pulseAnim, { toValue: 1, duration: duration, useNativeDriver: false }),
       ])
     );
     pulsation.start();
     return () => pulsation.stop();
   }, [isThinking]);
 
-  // Smooth fade transition when swapping states
+  // Layout animation to smoothly transition text/shadow colors
   useEffect(() => {
-    Animated.sequence([
-      Animated.timing(lottieOpacity, { toValue: 0, duration: 150, useNativeDriver: true }),
-      Animated.timing(lottieOpacity, { toValue: 1, duration: 300, useNativeDriver: true })
-    ]).start();
-
-    if (animationRef.current) {
-      setTimeout(() => {
-        animationRef.current?.play();
-      }, 150);
-    }
-    
-    // Layout animation to smoothly transition colors/borders
     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
   }, [currentState]);
 
-  let accentColor = '#0ff'; // Cyan
+  // Determine neon accent colors based on state
+  let accentColor = '#0ff'; // Cyan (Idle)
   let currentLabel = currentState;
   
   if (isThinking) {
@@ -59,28 +48,30 @@ export const LottieAvatar = ({ currentState, isThinking }) => {
     accentColor = '#ec4899'; // Neon Pink
   }
 
+  // Dynamically interpolate the shadow's glowing radius
+  const shadowGlow = pulseAnim.interpolate({
+    inputRange: [1, 1.25],
+    outputRange: [15, 35]
+  });
+
   return (
     <View style={styles.container}>
-      <Text style={[styles.title, { textShadowColor: accentColor }]}>Khatarnak AI</Text>
-      
-      {/* Floating Animated Aura */}
+      {/* We apply the glow purely as a shadow. Background circle is fully removed. */}
       <Animated.View style={[
-        styles.glowRing, 
-        { transform: [{ scale: pulseAnim }], backgroundColor: accentColor }
-      ]} />
-
-      <View style={styles.avatarContainer}>
-        <Animated.View style={{ opacity: lottieOpacity }}>
-          <LottieView
-            ref={animationRef}
-            source={{ uri: ANIMATIONS[currentState] || ANIMATIONS.idle }}
-            autoPlay
-            loop
-            style={styles.lottie}
-          />
-        </Animated.View>
-      </View>
-      <Text style={[styles.statusText, { color: accentColor }]}>{currentLabel.toUpperCase()}</Text>
+        styles.avatarContainer,
+        {
+          shadowColor: accentColor,
+          shadowRadius: shadowGlow,
+        }
+      ]}>
+        <LottieView
+          ref={animationRef}
+          source={ANIMATIONS.idle} // Hardcoded to use idle animation always
+          autoPlay
+          loop
+          style={styles.lottie}
+        />
+      </Animated.View>
     </View>
   );
 };
@@ -101,22 +92,18 @@ const styles = StyleSheet.create({
     textShadowRadius: 20,
     letterSpacing: 2,
   },
-  glowRing: {
-    position: 'absolute',
-    width: 250,
-    height: 250,
-    borderRadius: 125,
-    zIndex: 0,
-    opacity: 0.15,
-  },
   avatarContainer: {
     alignItems: 'center',
     justifyContent: 'center',
     zIndex: 1,
+    // Add base shadow properties for the neon glow
+    shadowOffset: { width: 0, height: 15 }, // Pushes shadow toward the bottom
+    shadowOpacity: 0.85,
+    elevation: 8, // For Android drop shadow
   },
   lottie: {
-    width: 240,
-    height: 240,
+    width: 260,
+    height: 260,
   },
   statusText: {
     marginTop: 20,

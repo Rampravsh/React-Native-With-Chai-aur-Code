@@ -61,16 +61,17 @@ export default function App() {
             style={{ flex: 1 }} 
             behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
           >
-            <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-              <View style={styles.layoutFlex}>
+            <View style={styles.layoutFlex}>
+              <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
                 <View style={styles.avatarSection}>
                   <LottieAvatar currentState={avatarState} isThinking={isThinking} />
                 </View>
-                <View style={styles.chatSection}>
-                  <ChatInterface messages={messages} onSend={handleSend} isThinking={isThinking} />
-                </View>
+              </TouchableWithoutFeedback>
+              
+              <View style={styles.chatSection}>
+                <ChatInterface messages={messages} onSend={handleSend} isThinking={isThinking} />
               </View>
-            </TouchableWithoutFeedback>
+            </View>
           </KeyboardAvoidingView>
         </LinearGradient>
       </SafeAreaView>

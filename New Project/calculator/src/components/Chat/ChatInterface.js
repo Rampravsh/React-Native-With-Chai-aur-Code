@@ -14,6 +14,8 @@ export const ChatInterface = ({ messages, onSend, isThinking }) => {
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => <MessageBubble text={item.text} isAI={item.isAI} />}
         contentContainerStyle={styles.listContent}
+        keyboardDismissMode="on-drag"
+        keyboardShouldPersistTaps="handled"
         onContentSizeChange={() => flatListRef.current?.scrollToEnd({ animated: true })}
         ListFooterComponent={
           isThinking ? (
