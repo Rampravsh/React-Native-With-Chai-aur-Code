@@ -10,7 +10,11 @@
   },
   "dependencies": {
     "expo": "~54.0.33",
+    "expo-blur": "~15.0.8",
+    "expo-linear-gradient": "~15.0.8",
+    "expo-speech": "~14.0.8",
     "expo-status-bar": "~3.0.9",
+    "lottie-react-native": "~7.3.1",
     "react": "19.1.0",
     "react-native": "0.81.5"
   },
