@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "calculator",
-    "slug": "calculator",
+    "name": "Calcify AI",
+    "slug": "calcify-ai",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",

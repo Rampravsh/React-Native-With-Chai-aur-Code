@@ -145,16 +145,17 @@ const styles = StyleSheet.create({
   },
   btnText: {
     color: '#fff',
-    fontSize: 26,
-    fontWeight: '600',
+    fontSize: 28,
+    fontWeight: '400',
+    letterSpacing: 1,
   },
   opText: {
     color: '#0ff', 
   },
   sendText: {
     color: '#fff',
-    fontSize: 22,
+    fontSize: 20,
     fontWeight: '800',
-    letterSpacing: 2,
+    letterSpacing: 2.5,
   }
 });
