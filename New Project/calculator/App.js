@@ -4,6 +4,7 @@ import { SafeAreaView, SafeAreaProvider } from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
 import * as Speech from 'expo-speech';
 import { LinearGradient } from 'expo-linear-gradient';
+import { Ionicons } from '@expo/vector-icons';
 import { LottieAvatar } from './src/components/Avatar/LottieAvatar';
 import { ChatInterface } from './src/components/Chat/ChatInterface';
 import { CustomKeypad } from './src/components/Keypad/CustomKeypad';
@@ -79,15 +80,15 @@ export default function App() {
         >
           {/* Clear Chat Global Icon positioned absolutely top left */}
           <View style={styles.clearIconWrapper}>
-            <TouchableOpacity onPress={clearChat}>
-               <Text style={styles.headerIcon}>🗑️</Text>
+            <TouchableOpacity onPress={clearChat} activeOpacity={0.6}>
+               <Ionicons name="trash-outline" size={26} color="#0ff" />
             </TouchableOpacity>
           </View>
 
           {/* Settings Global Icon positioned absolutely top right */}
           <View style={styles.settingsIconWrapper}>
-            <TouchableOpacity onPress={() => setIsSettingsOpen(true)}>
-               <Text style={styles.headerIcon}>⚙️</Text>
+            <TouchableOpacity onPress={() => setIsSettingsOpen(true)} activeOpacity={0.6}>
+               <Ionicons name="settings-outline" size={26} color="#0ff" />
             </TouchableOpacity>
           </View>
           

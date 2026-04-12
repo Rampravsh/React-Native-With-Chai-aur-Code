@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, TouchableOpacity, Text, StyleSheet, Vibration } from 'react-native';
 import { BlurView } from 'expo-blur';
 import Constants from 'expo-constants';
+import { Ionicons } from '@expo/vector-icons';
 
 // Safely lazy-load the library so it doesn't crash pure JavaScript contexts
 let Voice = null;
@@ -100,8 +101,9 @@ export const ChatInput = ({ onSend, onOpenCalculator }) => {
         style={styles.micButton} 
         onPressIn={handleVoiceHold}
         onPressOut={handleVoiceRelease}
+        activeOpacity={0.5}
       >
-        <Text style={styles.micIcon}>🎤</Text>
+        <Ionicons name="mic-outline" size={26} color="#0ff" />
       </TouchableOpacity>
     </BlurView>
   );
