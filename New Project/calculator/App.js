@@ -1,20 +1,27 @@
+import React from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { useColorScheme, View, StyleSheet } from 'react-native';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { CalculatorScreen } from './src/components/CalculatorScreen';
+import { colors } from './src/theme/colors';
 
 export default function App() {
+  const systemTheme = useColorScheme();
+  const theme = systemTheme === 'dark' ? 'dark' : 'light';
+  const currentColors = colors[theme];
+
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <SafeAreaProvider>
+      <View style={[styles.container, { backgroundColor: currentColors.background }]}>
+        <StatusBar style={theme === 'dark' ? 'light' : 'dark'} backgroundColor={currentColors.background} />
+        <CalculatorScreen themeColors={currentColors} />
+      </View>
+    </SafeAreaProvider>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
   },
 });
