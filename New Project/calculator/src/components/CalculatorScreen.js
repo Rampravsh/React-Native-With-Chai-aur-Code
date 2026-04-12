@@ -1,24 +1,15 @@
-import React, { useEffect, useState } from 'react';
-import { View, StyleSheet } from 'react-native';
+import React from 'react';
+import { View, StyleSheet, Vibration } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useCalculator } from '../hooks/useCalculator';
 import { Display } from './Display';
 import { Button } from './Button';
-import { useAudioPlayer } from 'expo-audio';
 
 export const CalculatorScreen = ({ themeColors }) => {
-  const { currentValue, handleInput } = useCalculator();
-  const player = useAudioPlayer('https://cdn.freesound.org/previews/256/256113_3263906-lq.mp3');
+  const { currentValue, previousValue, operator, handleInput } = useCalculator();
 
   const playSound = () => {
-    if (player) {
-      try {
-        player.seekTo(0);
-        player.play();
-      } catch (e) {
-        console.log('Failed to play sound', e);
-      }
-    }
+    Vibration.vibrate(40); // Soft vibration for tap feedback
   };
 
   const renderRow = (buttons) => (
@@ -38,7 +29,12 @@ export const CalculatorScreen = ({ themeColors }) => {
 
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: themeColors.background }]}>
-      <Display currentValue={currentValue} themeColors={themeColors} />
+      <Display 
+        currentValue={currentValue}
+        previousValue={previousValue} 
+        operator={operator} 
+        themeColors={themeColors}
+      />
       <View style={styles.keypad}>
         {renderRow([
           { text: 'AC', type: 'action' },
@@ -67,6 +63,7 @@ export const CalculatorScreen = ({ themeColors }) => {
         {renderRow([
           { text: '0', type: 'num' },
           { text: '.', type: 'action' },
+          { text: '⌫', type: 'action' },
           { text: '=', type: 'equal' },
         ])}
       </View>

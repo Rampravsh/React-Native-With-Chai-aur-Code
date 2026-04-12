@@ -24,16 +24,13 @@ export const Button = ({ text, onPress, themeColors, type = 'num', playSound }) 
     onPress(type, text);
   };
 
-  const isZero = text === '0';
-
   return (
     <TouchableOpacity
       activeOpacity={0.7}
       onPress={handlePress}
       style={[
         styles.button,
-        { backgroundColor: bgColor },
-        isZero && styles.zeroButton,
+        { backgroundColor: bgColor }
       ]}
     >
       <Text style={[styles.text, { color: textColor }]}>{text}</Text>
@@ -54,11 +51,6 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.15,
     shadowRadius: 5,
-  },
-  zeroButton: {
-    width: Math.floor((buttonWidth * 2) - 20),
-    alignItems: 'flex-start',
-    paddingLeft: 30, // to align the 0 text like iOS
   },
   text: {
     fontSize: 32,

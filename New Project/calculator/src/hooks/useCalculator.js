@@ -60,6 +60,17 @@ export const useCalculator = () => {
         setOperator(null);
         setPreviousValue(null);
         break;
+      case '⌫':
+        if (currentValue.length > 1) {
+          if (currentValue.length === 2 && currentValue.startsWith('-')) {
+            setCurrentValue('0');
+          } else {
+            setCurrentValue(currentValue.slice(0, -1));
+          }
+        } else {
+          setCurrentValue('0');
+        }
+        break;
       case '+/-':
         setCurrentValue((parseFloat(currentValue) * -1).toString());
         break;
