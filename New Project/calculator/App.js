@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, TouchableWithoutFeedback, Keyboard, LayoutAnimation, KeyboardAvoidingView, Platform } from 'react-native';
+import { View, StyleSheet, TouchableWithoutFeedback, Keyboard, LayoutAnimation, KeyboardAvoidingView, Platform, TouchableOpacity, Text } from 'react-native';
 import { SafeAreaView, SafeAreaProvider } from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
 import * as Speech from 'expo-speech';
@@ -7,6 +7,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { LottieAvatar } from './src/components/Avatar/LottieAvatar';
 import { ChatInterface } from './src/components/Chat/ChatInterface';
 import { CustomKeypad } from './src/components/Keypad/CustomKeypad';
+import { SettingsModal } from './src/components/SettingsModal';
 import { parseMathQuery } from './src/utils/mathParser';
 
 export default function App() {
@@ -16,6 +17,9 @@ export default function App() {
   const [avatarState, setAvatarState] = useState('idle');
   const [isThinking, setIsThinking] = useState(false);
   const [isKeypadOpen, setIsKeypadOpen] = useState(false);
+  const [userName, setUserName] = useState('');
+  const [language, setLanguage] = useState('en-US');
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
 
   const addMessage = (text, isAI) => {
     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
@@ -29,7 +33,7 @@ export default function App() {
     setAvatarState('idle');  
     
     setTimeout(() => {
-      const calculation = parseMathQuery(userText);
+      const calculation = parseMathQuery(userText, language, userName);
       const responseText = calculation.success ? calculation.resultText : calculation.error;
       const newState = calculation.success ? 'happy' : 'confused';
       
@@ -38,6 +42,7 @@ export default function App() {
       addMessage(responseText, true);
       
       Speech.speak(responseText, {
+        language: language,
         rate: 1.05,
         pitch: 1.1,
         onDone: () => {
@@ -60,6 +65,20 @@ export default function App() {
           start={{x: 0, y: 0}}
           end={{x: 1, y: 1}}
         >
+          {/* Settings Global Icon positioned absolutely top right */}
+          <View style={styles.settingsIconWrapper}>
+            <TouchableOpacity onPress={() => setIsSettingsOpen(true)}>
+               <Text style={styles.settingsIcon}>⚙️</Text>
+            </TouchableOpacity>
+          </View>
+          
+          <SettingsModal 
+            isVisible={isSettingsOpen} 
+            onClose={() => setIsSettingsOpen(false)} 
+            userName={userName} setUserName={setUserName} 
+            language={language} setLanguage={setLanguage} 
+          />
+
           <KeyboardAvoidingView 
             style={{ flex: 1 }} 
             behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -115,5 +134,18 @@ const styles = StyleSheet.create({
     flex: 2,
     borderTopWidth: 1,
     borderTopColor: 'rgba(255,255,255,0.05)',
+  },
+  settingsIconWrapper: {
+    position: 'absolute', 
+    top: 30, 
+    right: 25, 
+    zIndex: 100,
+    backgroundColor: 'rgba(0,0,0,0.4)',
+    borderRadius: 20,
+    padding: 10,
+    paddingHorizontal: 12,
+  },
+  settingsIcon: {
+    fontSize: 26,
   }
 });

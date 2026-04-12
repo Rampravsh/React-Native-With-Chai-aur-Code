@@ -1,14 +1,23 @@
 let memory = null;
 
-export const parseMathQuery = (query) => {
+export const parseMathQuery = (query, language = 'en-US', userName = '') => {
   if (!query) return { success: false, error: 'Empty query.' };
 
   const lowerQuery = query.toLowerCase().trim();
+  const nameTag = userName.trim() ? `, ${userName}` : '';
+
+  // Language Dictionary
+  const langLib = {
+    clear: language === 'hi-IN' ? `Mera memory clear ho gaya hai${nameTag}.` : `My memory has been cleared${nameTag}.`,
+    noMemory: language === 'hi-IN' ? `Mere memory me pichla calculation nahi hai${nameTag}.` : `I don't have a previous calculation in memory to use${nameTag}.`,
+    errorMath: language === 'hi-IN' ? `Ye badhiya calculation nahi lag raha hai${nameTag}.` : `That doesn't seem like a valid calculation${nameTag}.`,
+    errorCompute: language === 'hi-IN' ? `Mai isko compute nahi kar paya${nameTag}.` : `I couldn't compute that math${nameTag}.`
+  };
 
   // Reset Memory Command handling
   if (lowerQuery === 'clear' || lowerQuery === 'reset' || lowerQuery === 'forget') {
     memory = null;
-    return { success: true, resultText: "My memory has been cleared.", value: null };
+    return { success: true, resultText: langLib.clear, value: null };
   }
 
   try {
@@ -28,36 +37,37 @@ export const parseMathQuery = (query) => {
       .replace(/[a-z]/ig, '') // Strip remaining unparsable English syntax
       .trim();
 
-    // Contextual implied operator parsing (e.g. user just typing "+ 50" or "/ 2")
-    // Prepend the stored memory to the front of the parsed math expression
+    // Contextual implied operator parsing
     if (mathString.length > 0 && /^[+\-*/]/.test(mathString)) {
         if (memory !== null) {
             mathString = memory.toString() + ' ' + mathString;
         } else {
-            return { success: false, error: "I don't have a previous calculation in memory to use." };
+            return { success: false, error: langLib.noMemory };
         }
     }
 
     if (!mathString) {
-      return { success: false, error: "I didn't hear any valid math." };
+      return { success: false, error: langLib.errorMath };
     }
 
-    // Safely evaluate math expression without using dangerous 'eval'
     const result = new Function(`return ${mathString}`)();
     
     if (isNaN(result) || typeof result !== 'number' || !isFinite(result)) {
-      return { success: false, error: "That doesn't seem like a valid calculation." };
+      return { success: false, error: langLib.errorMath };
     }
 
-    // Update internal memory core
     memory = result;
+
+    const resultText = language === 'hi-IN' 
+        ? `Is ka jawab hai ${result}${nameTag}` 
+        : `The answer is ${result}${nameTag}`;
 
     return { 
       success: true, 
-      resultText: `The answer is ${result}`, 
+      resultText: resultText,
       value: result 
     };
   } catch (error) {
-    return { success: false, error: "I couldn't compute that math." };
+    return { success: false, error: langLib.errorCompute };
   }
 };
