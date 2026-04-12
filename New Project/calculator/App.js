@@ -26,6 +26,18 @@ export default function App() {
     setMessages(prev => [...prev, { id: Date.now().toString() + Math.random(), text, isAI }]);
   };
 
+  const clearChat = () => {
+    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+    setMessages([{ 
+       id: Date.now().toString(), 
+       text: language === 'hi-IN' ? 'Chat saaf ho gaya hai. Puchiye!' : 'Chat cleared! Ask me anything.', 
+       isAI: true 
+    }]);
+    
+    // Explicitly reset the mathParser memory behind the scenes so old calculations are wiped
+    parseMathQuery('clear', language, userName);
+  };
+
   const handleSend = (userText) => {
     setIsKeypadOpen(false); // Automatically transition out of keypad on send
     addMessage(userText, false);
@@ -65,10 +77,17 @@ export default function App() {
           start={{x: 0, y: 0}}
           end={{x: 1, y: 1}}
         >
+          {/* Clear Chat Global Icon positioned absolutely top left */}
+          <View style={styles.clearIconWrapper}>
+            <TouchableOpacity onPress={clearChat}>
+               <Text style={styles.headerIcon}>🗑️</Text>
+            </TouchableOpacity>
+          </View>
+
           {/* Settings Global Icon positioned absolutely top right */}
           <View style={styles.settingsIconWrapper}>
             <TouchableOpacity onPress={() => setIsSettingsOpen(true)}>
-               <Text style={styles.settingsIcon}>⚙️</Text>
+               <Text style={styles.headerIcon}>⚙️</Text>
             </TouchableOpacity>
           </View>
           
@@ -145,7 +164,17 @@ const styles = StyleSheet.create({
     padding: 10,
     paddingHorizontal: 12,
   },
-  settingsIcon: {
-    fontSize: 26,
+  clearIconWrapper: {
+    position: 'absolute', 
+    top: 30, 
+    left: 25, 
+    zIndex: 100,
+    backgroundColor: 'rgba(0,0,0,0.4)',
+    borderRadius: 20,
+    padding: 10,
+    paddingHorizontal: 12,
+  },
+  headerIcon: {
+    fontSize: 24,
   }
 });
