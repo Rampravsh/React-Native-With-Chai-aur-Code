@@ -24,6 +24,15 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "plugins": [
+      [
+        "@react-native-voice/voice",
+        {
+          "microphonePermission": "Allow Khatarnak AI to access your microphone.",
+          "speechRecognitionPermission": "Allow Khatarnak AI to transcribe your speech."
+        }
+      ]
+    ]
   }
 }
