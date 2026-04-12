@@ -69,7 +69,7 @@ export const LottieAvatar = ({ currentState, isThinking }) => {
         { transform: [{ scale: pulseAnim }], backgroundColor: accentColor }
       ]} />
 
-      <View style={[styles.avatarContainer, { borderColor: accentColor }]}>
+      <View style={styles.avatarContainer}>
         <Animated.View style={{ opacity: lottieOpacity }}>
           <LottieView
             ref={animationRef}
@@ -89,50 +89,38 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: 'transparent',
-    borderRightWidth: 1,
-    borderRightColor: 'rgba(255, 255, 255, 0.05)',
     alignItems: 'center',
     justifyContent: 'center',
   },
   title: {
     color: '#fff',
-    fontSize: 28,
+    fontSize: 24,
     fontWeight: '900',
-    marginBottom: 50,
+    marginBottom: 20,
     textShadowOffset: { width: 0, height: 0 },
     textShadowRadius: 20,
     letterSpacing: 2,
   },
   glowRing: {
     position: 'absolute',
-    width: 270,
-    height: 270,
-    borderRadius: 135,
+    width: 250,
+    height: 250,
+    borderRadius: 125,
     zIndex: 0,
     opacity: 0.15,
   },
   avatarContainer: {
-    width: 260,
-    height: 260,
-    backgroundColor: 'rgba(0,0,0,0.6)',
-    borderRadius: 130,
-    overflow: 'hidden',
     alignItems: 'center',
     justifyContent: 'center',
-    borderWidth: 2,
     zIndex: 1,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 10 },
-    shadowOpacity: 0.5,
-    shadowRadius: 20,
   },
   lottie: {
-    width: 280,
-    height: 280,
+    width: 240,
+    height: 240,
   },
   statusText: {
-    marginTop: 40,
-    fontSize: 16,
+    marginTop: 20,
+    fontSize: 14,
     letterSpacing: 6,
     fontWeight: '800',
     opacity: 0.9,

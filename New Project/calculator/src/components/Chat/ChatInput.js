@@ -12,8 +12,14 @@ export const ChatInput = ({ onSend }) => {
     setText('Listening...');
     
     setTimeout(() => {
-      setText('what is 50 plus 20');
+      const recognizedSpeech = '50 plus 20';
+      setText(recognizedSpeech);
       setIsListening(false);
+      // Automatically trigger calculation logic on voice finish
+      setTimeout(() => {
+        onSend(recognizedSpeech);
+        setText('');
+      }, 500); 
     }, 1500);
   };
 
