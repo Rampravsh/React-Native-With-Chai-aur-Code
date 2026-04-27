@@ -20,19 +20,29 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "edgeToEdgeEnabled": true
+      "edgeToEdgeEnabled": true,
+      "permissions": [
+        "android.permission.RECORD_AUDIO"
+      ],
+      "package": "com.rampraveshkr.calcifyai"
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
     "plugins": [
       [
-        "@react-native-voice/voice",
+        "expo-speech-recognition",
         {
           "microphonePermission": "Allow Khatarnak AI to access your microphone.",
           "speechRecognitionPermission": "Allow Khatarnak AI to transcribe your speech."
         }
       ]
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "4aa90b0e-d848-489a-a29e-21365bc6256c"
+      }
+    },
+    "owner": "rampraveshkr"
   }
 }

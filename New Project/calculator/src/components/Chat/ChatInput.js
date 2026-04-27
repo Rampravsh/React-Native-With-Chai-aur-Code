@@ -4,12 +4,12 @@ import { BlurView } from 'expo-blur';
 import Constants from 'expo-constants';
 import { Ionicons } from '@expo/vector-icons';
 
-// Safely lazy-load the library so it doesn't crash pure JavaScript contexts
-let Voice = null;
+// Safely lazy-load the modern Expo Speech Recognition library
+let SpeechRec = null;
 try {
-  Voice = require('@react-native-voice/voice').default;
+  SpeechRec = require('expo-speech-recognition').ExpoSpeechRecognitionModule;
 } catch (e) {
-  // Graceful fail in unsupported environments
+  // Graceful fail in unsupported environments or standard Expo Go
 }
 
 export const ChatInput = ({ onSend, onOpenCalculator }) => {
@@ -20,31 +20,41 @@ export const ChatInput = ({ onSend, onOpenCalculator }) => {
   const isExpoGo = Constants.appOwnership === 'expo' || Constants.executionEnvironment === 'storeClient';
 
   useEffect(() => {
-    if (Voice && !isExpoGo) {
-      Voice.onSpeechStart = () => {
-        setLoadingText('Listening...');
-      };
-      Voice.onSpeechResults = (e) => {
-        if (e.value && e.value.length > 0) {
-          setIsListening(false);
-          const resultText = e.value[0];
-          setLoadingText(resultText);
-          setTimeout(() => {
-            onSend(resultText);
-            setLoadingText('Dial numbers...');
-          }, 500);
-        }
-      };
-      Voice.onSpeechError = (e) => {
-        setIsListening(false);
-        setLoadingText('Mic Error');
-        setTimeout(() => setLoadingText('Dial numbers...'), 1000);
-      };
+    let subStart, subResult, subError;
 
-      return () => {
-        Voice.destroy().then(Voice.removeAllListeners);
-      };
+    if (SpeechRec && !isExpoGo) {
+      try {
+        subStart = SpeechRec.addListener('start', () => {
+          setLoadingText('Listening...');
+        });
+        
+        subResult = SpeechRec.addListener('result', (e) => {
+          if (e.results && e.results[0] && e.results[0].transcript) {
+            setIsListening(false);
+            const resultText = e.results[0].transcript;
+            setLoadingText(resultText);
+            setTimeout(() => {
+              onSend(resultText);
+              setLoadingText('Dial numbers...');
+            }, 500);
+          }
+        });
+
+        subError = SpeechRec.addListener('error', (e) => {
+          setIsListening(false);
+          setLoadingText('Mic Error');
+          setTimeout(() => setLoadingText('Dial numbers...'), 1000);
+        });
+      } catch (err) {
+         // Silently catch listener binding errors
+      }
     }
+
+    return () => {
+      if (subStart) subStart.remove();
+      if (subResult) subResult.remove();
+      if (subError) subError.remove();
+    };
   }, []);
 
   const handleVoiceHold = async () => {
@@ -52,7 +62,7 @@ export const ChatInput = ({ onSend, onOpenCalculator }) => {
     setIsListening(true);
     setLoadingText('Initializing Mic...');
     
-    if (isExpoGo || !Voice) {
+    if (isExpoGo || !SpeechRec) {
       // EXPO GO SIMULATION FALLBACK
       setLoadingText('Listening (Simulation)...');
       setTimeout(() => {
@@ -66,12 +76,13 @@ export const ChatInput = ({ onSend, onOpenCalculator }) => {
         }, 500); 
       }, 1500);
     } else {
-      // REAL NATIVE MODULE - Starts physical microphone recording
+      // REAL NATIVE MODULE - Starts physical microphone recording via EAS
       try {
-        await Voice.start('en-US');
+        await SpeechRec.requestPermissionsAsync();
+        await SpeechRec.start({ lang: 'en-US' });
       } catch (e) {
         setIsListening(false);
-        setLoadingText('Native Mic Error');
+        setLoadingText('Native Setup Error');
         setTimeout(() => setLoadingText('Dial numbers...'), 1000);
       }
     }
@@ -79,9 +90,9 @@ export const ChatInput = ({ onSend, onOpenCalculator }) => {
 
   const handleVoiceRelease = async () => {
       // Stop recording when user lifts their finger off the mic
-      if (!isExpoGo && Voice) {
+      if (!isExpoGo && SpeechRec) {
          try {
-           await Voice.stop();
+           await SpeechRec.stop();
          } catch (e) {
            // Catch manual stop errors harmlessly
          }
