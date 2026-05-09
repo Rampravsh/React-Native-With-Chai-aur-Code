@@ -18,8 +18,11 @@ const index = () => {
       <Link style={styles.link} href={"/overview/user"}>
         Go to overview
       </Link>
-      <Link style={styles.link} href={"/3435"}>
+      <Link style={styles.link} href={"user/343523"}>
         Go to userId Page
+      </Link>
+      <Link style={styles.link} href={"product/3433455"}>
+        Go to productId Page
       </Link>
     </View>
   );
@@ -36,7 +39,7 @@ const styles = StyleSheet.create({
   },
   link: {
     backgroundColor: "red",
-    color:"white",
+    color: "white",
     width: 200,
     height: 50,
     margin: 5,
