@@ -1,14 +1,9 @@
-import { StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import { Redirect } from "expo-router";
+import { StyleSheet } from "react-native";
 
 const index = () => {
-  return (
-    <View>
-      <Text>index</Text>
-    </View>
-  )
-}
+  return <Redirect href="/(root)/(tabs)" />;
+};
 
-export default index
+export default index;
 
-const styles = StyleSheet.create({})
